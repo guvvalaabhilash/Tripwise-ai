@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react'
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Sparkles, ArrowRight, Shield, Globe } from 'lucide-react'
+import { Sparkles, ArrowRight, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { LANDING_FEATURES } from '@/constants'
 
@@ -133,7 +133,6 @@ export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0)
   const heroRef = useRef<HTMLDivElement>(null)
   const ctaSectionRef = useRef<HTMLDivElement>(null)
-  const [spotlightPos, setSpotlightPos] = useState({ x: 50, y: 50 })
 
   const { scrollYProgress } = useScroll()
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.97])
@@ -145,14 +144,6 @@ export default function LandingPage() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  const handleCtaMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    setSpotlightPos({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    })
-  }
 
   const navScrolled = scrollY > 20
 

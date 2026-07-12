@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
 }
@@ -11,6 +11,7 @@ const variants = {
   primary: 'relative inline-flex items-center justify-center font-semibold uppercase tracking-wider text-[var(--color-accent)] bg-transparent border-0 px-0 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   secondary: 'relative inline-flex items-center justify-center font-semibold uppercase tracking-wider text-[var(--color-foreground)] border border-[var(--color-foreground)] bg-transparent px-6 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   ghost: 'relative inline-flex items-center justify-center font-medium text-[var(--color-muted-foreground)] border-0 bg-transparent px-4 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  danger: 'relative inline-flex items-center justify-center font-semibold uppercase tracking-wider text-[#FF4D6D] border border-[#FF4D6D] bg-transparent px-6 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4D6D] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
 }
 
 const sizes = {
@@ -23,6 +24,7 @@ const hoverStyles = {
   primary: 'hover:translate-y-px active:translate-y-0.5',
   secondary: 'hover:bg-[var(--color-foreground)] hover:text-[var(--color-background)] hover:translate-y-px active:translate-y-0.5',
   ghost: 'hover:text-[var(--color-foreground)]',
+  danger: 'hover:bg-[#FF4D6D] hover:text-white hover:translate-y-px active:translate-y-0.5',
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

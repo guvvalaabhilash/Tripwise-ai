@@ -1,10 +1,11 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, type HTMLMotionProps } from 'framer-motion'
 
-interface GlassButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode
-  size?: 'sm' | 'md' | 'lg'
-}
+type GlassButtonProps = Omit<HTMLMotionProps<'button'>, 'children'> &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    children?: React.ReactNode
+    size?: 'sm' | 'md' | 'lg'
+  }
 
 export const GlassButton: React.FC<GlassButtonProps> = ({ children, size = 'md', className = '', ...rest }) => {
   const sizes: Record<string, string> = {

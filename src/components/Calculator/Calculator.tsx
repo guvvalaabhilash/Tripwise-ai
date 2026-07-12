@@ -51,7 +51,6 @@ export function Calculator({ onHistoryUpdate, showScientific }: CalculatorProps)
     const cur = current()
     if (operator && !waitNext) {
       const result = applyOperator(operator, operand!, cur)
-      const expr = `${formatNumber(operand!)} ${operator} ${formatNumber(cur)}`
       setDisplayVal(result)
       setExpression(`${formatNumber(result)} ${op}`)
       setOperand(result)

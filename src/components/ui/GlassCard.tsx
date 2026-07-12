@@ -1,8 +1,9 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, type ReactNode } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, type HTMLMotionProps } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-interface GlassCardProps extends HTMLMotionProps<'div'> {
+interface GlassCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
+  children?: ReactNode
   hover?: boolean
   glow?: 'royal' | 'cyan' | 'purple' | 'none'
   padding?: 'sm' | 'md' | 'lg' | 'none'

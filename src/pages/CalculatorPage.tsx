@@ -15,15 +15,11 @@ export default function CalculatorPage() {
   const [rightTab, setRightTab]           = useState<RightTab>('history')
   const [historyKey, setHistoryKey]       = useState(0)   // force re-use recall
 
-  // recalled value is injected via the Calculator key reset trick
-  const [recalledVal, setRecalledVal]     = useState<string | null>(null)
-
   const handleHistoryUpdate = (entries: HistoryEntry[]) => setHistory(entries)
 
   const handleClearHistory = () => { historyClear(); setHistory([]) }
   const handleRemoveEntry  = (id: string) => setHistory(historyRemove(id))
-  const handleUseEntry     = (result: string) => {
-    setRecalledVal(result)
+  const handleUseEntry     = (_result: string) => {
     setHistoryKey(k => k + 1)
   }
 
