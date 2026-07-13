@@ -9,20 +9,29 @@ type GlassButtonProps = Omit<HTMLMotionProps<'button'>, 'children'> &
 
 export const GlassButton: React.FC<GlassButtonProps> = ({ children, size = 'md', className = '', ...rest }) => {
   const sizes: Record<string, string> = {
-    sm: 'px-3 py-2 text-sm rounded-xl',
-    md: 'px-4 py-2.5 text-sm rounded-[18px]',
-    lg: 'px-5 py-3 text-base rounded-[18px]'
+    sm: 'px-4 py-2 text-sm rounded-xl',
+    md: 'px-5 py-2.5 text-sm rounded-xl',
+    lg: 'px-6 py-3 text-base rounded-xl',
   }
 
   return (
     <motion.button
-      whileTap={{ scale: 0.98 }}
-      whileHover={{ y: -4 }}
-      transition={{ type: 'spring', stiffness: 600, damping: 22 }}
-      className={`glass-strong gradient-text-animated pulse-glow inline-flex items-center gap-2 justify-center ${sizes[size]} ${className}`}
+      whileTap={{ scale: 0.97 }}
+      whileHover={{ y: -2 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+      className={[
+        'inline-flex items-center justify-center gap-2 font-semibold text-white cursor-pointer',
+        'bg-gradient-to-r from-[#4F7CFF] to-[#6A5CFF]',
+        'border border-white/10',
+        'shadow-[0_4px_16px_rgba(79,124,255,0.35)]',
+        'hover:shadow-[0_8px_24px_rgba(79,124,255,0.5)]',
+        'transition-shadow duration-200',
+        sizes[size],
+        className,
+      ].join(' ')}
       {...rest}
     >
-      <span className="relative z-10">{children}</span>
+      {children}
     </motion.button>
   )
 }

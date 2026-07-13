@@ -8,23 +8,51 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants = {
-  primary: 'relative inline-flex items-center justify-center font-semibold uppercase tracking-wider text-[var(--color-accent)] bg-transparent border-0 px-0 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-  secondary: 'relative inline-flex items-center justify-center font-semibold uppercase tracking-wider text-[var(--color-foreground)] border border-[var(--color-foreground)] bg-transparent px-6 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-  ghost: 'relative inline-flex items-center justify-center font-medium text-[var(--color-muted-foreground)] border-0 bg-transparent px-4 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-  danger: 'relative inline-flex items-center justify-center font-semibold uppercase tracking-wider text-[#FF4D6D] border border-[#FF4D6D] bg-transparent px-6 gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4D6D] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  primary: [
+    'inline-flex items-center justify-center gap-2 font-semibold text-white cursor-pointer',
+    'bg-gradient-to-r from-[#4F7CFF] to-[#6A5CFF]',
+    'border border-white/10 rounded-xl',
+    'shadow-[0_4px_16px_rgba(79,124,255,0.35)]',
+    'hover:shadow-[0_8px_24px_rgba(79,124,255,0.5)] hover:-translate-y-0.5',
+    'active:translate-y-0 active:shadow-[0_4px_12px_rgba(79,124,255,0.3)]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F7CFF]/50',
+    'disabled:pointer-events-none disabled:opacity-50',
+    'transition-all duration-200 whitespace-nowrap',
+  ].join(' '),
+
+  secondary: [
+    'inline-flex items-center justify-center gap-2 font-medium text-[#AEB7C6] cursor-pointer',
+    'bg-white/5 border border-white/10 rounded-xl',
+    'hover:text-white hover:bg-white/8 hover:border-white/18',
+    'active:bg-white/6',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+    'disabled:pointer-events-none disabled:opacity-50',
+    'transition-all duration-200 whitespace-nowrap',
+  ].join(' '),
+
+  ghost: [
+    'inline-flex items-center justify-center gap-2 font-medium text-[#AEB7C6] cursor-pointer',
+    'bg-transparent border border-transparent rounded-xl',
+    'hover:text-white hover:bg-white/6 hover:border-white/8',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+    'disabled:pointer-events-none disabled:opacity-50',
+    'transition-all duration-200 whitespace-nowrap',
+  ].join(' '),
+
+  danger: [
+    'inline-flex items-center justify-center gap-2 font-semibold text-[#FF4D6D] cursor-pointer',
+    'bg-[#FF4D6D]/8 border border-[#FF4D6D]/25 rounded-xl',
+    'hover:bg-[#FF4D6D]/16 hover:border-[#FF4D6D]/4 hover:text-white',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4D6D]/50',
+    'disabled:pointer-events-none disabled:opacity-50',
+    'transition-all duration-200 whitespace-nowrap',
+  ].join(' '),
 }
 
 const sizes = {
-  sm: 'py-2 text-sm gap-2',
-  md: 'py-3 text-base gap-2.5',
-  lg: 'py-4 text-lg gap-3',
-}
-
-const hoverStyles = {
-  primary: 'hover:translate-y-px active:translate-y-0.5',
-  secondary: 'hover:bg-[var(--color-foreground)] hover:text-[var(--color-background)] hover:translate-y-px active:translate-y-0.5',
-  ghost: 'hover:text-[var(--color-foreground)]',
-  danger: 'hover:bg-[#FF4D6D] hover:text-white hover:translate-y-px active:translate-y-0.5',
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-5 py-2.5 text-sm',
+  lg: 'px-6 py-3 text-base',
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -33,23 +61,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={cn(
-          'inline-flex items-center justify-center font-medium cursor-pointer transition-all duration-150',
-          variants[variant],
-          sizes[size],
-          hoverStyles[variant],
-          off && 'pointer-events-none opacity-50',
-          className
-        )}
+        className={cn(variants[variant], sizes[size], off && 'pointer-events-none opacity-50', className)}
         disabled={off}
         {...props}
       >
-        {variant === 'primary' && (
-          <span className="absolute bottom-0 left-0 h-0.5 bg-[var(--color-accent)] transition-transform duration-150 origin-left scale-x-100 group-hover:scale-x-110" />
-        )}
-        {variant === 'ghost' && (
-          <span className="absolute bottom-0 left-0 h-px bg-[var(--color-foreground)] transition-transform duration-150 origin-left scale-x-0 group-hover:scale-x-100" />
-        )}
         {loading && (
           <svg className="animate-spin h-4 w-4 shrink-0" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />

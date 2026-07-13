@@ -12,7 +12,7 @@ export function Select({ label, value, onChange, options, className }: SelectPro
   return (
     <div className="space-y-1.5">
       {label && (
-        <label className="text-xs font-medium text-[#6F7D9E] uppercase tracking-wide">
+        <label className="block text-xs font-semibold text-[#AEB7C6] uppercase tracking-wider">
           {label}
         </label>
       )}
@@ -20,17 +20,16 @@ export function Select({ label, value, onChange, options, className }: SelectPro
         value={value}
         onChange={e => onChange(e.target.value)}
         className={cn(
-          'w-full rounded-xl px-4 py-2.5 text-sm text-[#F8FAFC]',
-          'bg-[rgba(14,18,38,0.65)] backdrop-blur-sm',
-          'border border-[#4F7BFF]/15',
-          'focus:outline-none focus:border-[#4F7BFF]/50 focus:ring-2 focus:ring-[#4F7BFF]/15',
-          'focus:shadow-[0_0_15px_rgba(0,229,255,0.12)]',
-          'appearance-none cursor-pointer transition-all duration-200',
+          'w-full bg-white/4 border border-white/10 rounded-xl',
+          'px-4 py-2.5 text-sm text-white',
+          'outline-none appearance-none cursor-pointer',
+          'transition-all duration-200',
+          'focus:border-[#4F7CFF]/50 focus:bg-[#4F7CFF]/6 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.12)]',
           className,
         )}
       >
         {options.map(opt => (
-          <option key={opt.value} value={opt.value} className="bg-[#0B1023] text-[#F8FAFC]">
+          <option key={opt.value} value={opt.value} className="bg-[#0B1020] text-white">
             {opt.label}
           </option>
         ))}

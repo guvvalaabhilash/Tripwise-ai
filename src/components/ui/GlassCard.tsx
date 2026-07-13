@@ -7,17 +7,17 @@ interface GlassCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   hover?: boolean
   glow?: 'royal' | 'cyan' | 'purple' | 'none'
   padding?: 'sm' | 'md' | 'lg' | 'none'
-  tilt?: boolean          // 3D mouse-reactive tilt
-  sweep?: boolean         // periodic light sweep
-  animated?: boolean      // animated border on
+  tilt?: boolean
+  sweep?: boolean
+  animated?: boolean
 }
 
-const paddingMap = { sm: 'p-4', md: 'p-6', lg: 'p-8', none: '' }
+const paddingMap = { sm: 'p-4', md: 'p-5', lg: 'p-6', none: '' }
 
 const glowMap = {
-  royal:  'shadow-[0_0_20px_rgba(79,123,255,0.25),0_0_60px_rgba(79,123,255,0.1)]',
-  cyan:   'shadow-[0_0_20px_rgba(0,229,255,0.25),0_0_60px_rgba(0,229,255,0.1)]',
-  purple: 'shadow-[0_0_20px_rgba(123,97,255,0.25),0_0_60px_rgba(123,97,255,0.1)]',
+  royal:  'shadow-[0_0_24px_rgba(79,124,255,0.2),0_0_48px_rgba(79,124,255,0.08)]',
+  cyan:   'shadow-[0_0_24px_rgba(0,194,255,0.2),0_0_48px_rgba(0,194,255,0.08)]',
+  purple: 'shadow-[0_0_24px_rgba(106,92,255,0.2),0_0_48px_rgba(106,92,255,0.08)]',
   none:   '',
 }
 
@@ -27,17 +27,16 @@ export function GlassCard({
 }: GlassCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
-  // 3D tilt values
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), { stiffness: 150, damping: 20 })
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), { stiffness: 150, damping: 20 })
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [4, -4]), { stiffness: 150, damping: 20 })
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-4, 4]), { stiffness: 150, damping: 20 })
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!tilt || !cardRef.current) return
     const rect = cardRef.current.getBoundingClientRect()
     mouseX.set((e.clientX - rect.left) / rect.width - 0.5)
-    mouseY.set((e.clientY - rect.top)  / rect.height - 0.5)
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5)
   }, [tilt, mouseX, mouseY])
 
   const handleMouseLeave = useCallback(() => {
@@ -52,10 +51,7 @@ export function GlassCard({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      whileHover={hover ? {
-        y: -8, scale: 1.015,
-        transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-      } : undefined}
+      whileHover={hover ? { y: -4, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } } : undefined}
       style={{ ...tiltStyle, ...style }}
       className={cn(
         'premium-card light-sweep-card',
@@ -67,10 +63,7 @@ export function GlassCard({
       )}
       {...props}
     >
-      {/* Periodic light sweep beam */}
       {sweep && <div className="sweep-beam pointer-events-none" aria-hidden />}
-
-      {/* Content sits above pseudo-elements */}
       <div className="relative z-10">
         {children}
       </div>
