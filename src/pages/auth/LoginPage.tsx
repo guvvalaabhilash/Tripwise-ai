@@ -1,8 +1,7 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase"
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
-import { GlassCard } from '@/components/ui/GlassCard'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 
@@ -15,7 +14,6 @@ export default function LoginPage() {
   const [email, setEmail]                     = useState('')
   const [password, setPassword]               = useState('')
 
-  // ── Email / password ────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -25,88 +23,71 @@ export default function LoginPage() {
     navigate('/dashboard')
   }
 
-  // ── Google OAuth ────────────────────────────────────────────────────────────
   const handleGoogleLogin = async () => {
     setGoogleLoading(true)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/dashboard` },
     })
-    if (error) {
-      console.error('[Google OAuth] Error:', error.message)
-      alert(error.message)
-      setGoogleLoading(false)
-    }
+    if (error) { console.error('[Google OAuth] Error:', error.message); alert(error.message); setGoogleLoading(false) }
   }
 
-  // ── Facebook OAuth ──────────────────────────────────────────────────────────
-  // Supabase redirects the browser to Facebook, then back to the redirectTo URL.
-  // Make sure this exact URL is whitelisted in:
-  //   1. Supabase → Authentication → URL Configuration → Redirect URLs
-  //   2. Facebook App → Facebook Login → Settings → Valid OAuth Redirect URIs
-  //      (must include: https://<project>.supabase.co/auth/v1/callback)
   const handleFacebookLogin = async () => {
     setFacebookLoading(true)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-        scopes: 'email,public_profile',
-      },
+      options: { redirectTo: `${window.location.origin}/dashboard`, scopes: 'email,public_profile' },
     })
-    if (error) {
-      console.error('[Facebook OAuth] Error:', error.message, error)
-      alert(error.message)
-      setFacebookLoading(false)
-    }
-    // On success the browser is redirected to Facebook — no cleanup needed here
+    if (error) { console.error('[Facebook OAuth] Error:', error.message, error); alert(error.message); setFacebookLoading(false) }
   }
 
   return (
-    <GlassCard glow="royal">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white font-jakarta">
-          Welcome back
-        </h2>
-        <p className="text-sm text-slate-400 mt-2">Sign in to continue your journey</p>
+    <div className="w-full rounded-2xl p-8 relative overflow-hidden"
+      style={{
+        background: 'rgba(8,12,30,0.75)',
+        backdropFilter: 'blur(28px) saturate(180%)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        boxShadow: '0 0 0 1px rgba(79,124,255,0.08), 0 32px 64px rgba(0,0,0,0.5)',
+      }}>
+      {/* Top accent */}
+      <div className="absolute inset-x-0 top-0 h-px"
+        style={{ background: 'linear-gradient(90deg,transparent,rgba(79,124,255,0.55),rgba(0,194,255,0.35),transparent)' }} />
+
+      <div className="text-center mb-7">
+        <h2 className="text-2xl font-bold text-white font-[family-name:var(--font-jakarta)]">Welcome back</h2>
+        <p className="text-sm text-[#AEB7C6] mt-1.5">Sign in to continue your journey</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Email"
-          type="email"
-          placeholder="alex.rivera@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={<Mail size={16} />}
-        />
+        <Input label="Email" type="email" placeholder="you@email.com"
+          value={email} onChange={e => setEmail(e.target.value)}
+          icon={<Mail size={15} />} />
+
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-slate-300">Password</label>
+          <label className="block text-xs font-semibold text-[#AEB7C6] uppercase tracking-wider">Password</label>
           <div className="relative">
-            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#AEB7C6] z-10 pointer-events-none" />
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-royal/50 focus:ring-2 focus:ring-royal/20 transition-all"
+              className="w-full bg-white/4 border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-[#AEB7C6]/50 outline-none focus:border-[#4F7CFF]/50 focus:bg-[#4F7CFF]/6 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.12)] transition-all [color-scheme:dark]"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-            >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            <button type="button" onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#AEB7C6] hover:text-white cursor-pointer z-10">
+              {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
         </div>
 
         <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2 text-slate-400 cursor-pointer">
-            <input type="checkbox" className="rounded border-white/20" />
-            Remember me
+          <label className="flex items-center gap-2 text-[#AEB7C6] cursor-pointer select-none">
+            <input type="checkbox" className="w-3.5 h-3.5 rounded border-white/20 accent-[#4F7CFF]" />
+            <span className="text-xs">Remember me</span>
           </label>
-          <Link to="/forgot-password" className="text-royal hover:text-cyan transition-colors">
+          <Link to="/forgot-password"
+            className="text-xs text-[#4F7CFF] hover:text-[#7B9FFF] transition-colors">
             Forgot password?
           </Link>
         </div>
@@ -116,12 +97,14 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <div className="relative my-6">
+      <div className="relative my-5">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/8" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="px-3 bg-transparent text-slate-500">or continue with</span>
+          <span className="px-3 text-[#AEB7C6]/50" style={{ background: 'rgba(8,12,30,0.75)' }}>
+            or continue with
+          </span>
         </div>
       </div>
 
@@ -134,12 +117,12 @@ export default function LoginPage() {
         </Button>
       </div>
 
-      <p className="text-center text-sm text-slate-400 mt-6">
+      <p className="text-center text-sm text-[#AEB7C6] mt-6">
         Don&apos;t have an account?{' '}
-        <Link to="/register" className="text-royal hover:text-cyan transition-colors font-medium">
+        <Link to="/register" className="text-[#4F7CFF] hover:text-[#7B9FFF] transition-colors font-semibold">
           Sign up
         </Link>
       </p>
-    </GlassCard>
+    </div>
   )
 }

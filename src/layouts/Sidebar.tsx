@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sparkles, LogOut } from 'lucide-react'
+import { Menu, X, Plane, LogOut } from 'lucide-react'
 import { NAV_ITEMS } from '@/constants'
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuthUser } from '@/hooks/useAuthUser'
@@ -32,11 +32,11 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
             background: 'linear-gradient(135deg, #4F7CFF, #00C2FF)',
             boxShadow: '0 0 20px rgba(79,124,255,0.5)',
           }}>
-          <Sparkles size={16} className="text-white" />
+          <Plane size={16} className="text-white" />
         </div>
         <div>
-          <h1 className="text-sm font-bold text-white font-[family-name:var(--font-jakarta)]">TripWise</h1>
-          <p className="text-[10px] text-[#AEB7C6]/60 tracking-widest uppercase">AI Travel</p>
+          <h1 className="text-sm font-bold text-white font-[family-name:var(--font-jakarta)] leading-none">TripWise</h1>
+          <p className="text-[9px] font-semibold tracking-widest uppercase text-[#4F7CFF] mt-0.5">AI TRAVEL</p>
         </div>
       </div>
 

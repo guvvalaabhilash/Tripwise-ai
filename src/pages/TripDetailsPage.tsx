@@ -145,8 +145,8 @@ export default function TripDetailsPage() {
 
   return (
     <div className="space-y-6">
-      <Link to="/dashboard" className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-        <ArrowLeft size={16} />
+      <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-[#AEB7C6] hover:text-white transition-colors">
+        <ArrowLeft size={15} />
         Back to Dashboard
       </Link>
 
@@ -155,10 +155,11 @@ export default function TripDetailsPage() {
         <img src={trip.image} alt={trip.destination} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-navy via-navy/60 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6">
-          <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">
+          <span className="text-xs px-2.5 py-1 rounded-full font-semibold"
+            style={{ background:'rgba(25,242,140,0.12)', color:'#19F28C', border:'1px solid rgba(25,242,140,0.25)' }}>
             {trip.status}
           </span>
-          <h1 className="text-3xl font-bold text-white mt-2 font-jakarta">{trip.name}</h1>
+          <h1 className="text-3xl font-bold text-white mt-2 font-[family-name:var(--font-jakarta)]">{trip.name}</h1>
           <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-slate-300">
             <span className="flex items-center gap-1"><MapPin size={14} />{trip.destination}</span>
             <span className="flex items-center gap-1">
@@ -171,20 +172,20 @@ export default function TripDetailsPage() {
         </div>
       </div>
 
-      {/* ── Editable dates card ──────────────────────────────────────────────── */}
+      {/* ── Editable dates card ── */}
       <GlassCard>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Calendar size={17} className="text-royal-light" />
+            <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background:'rgba(79,124,255,0.12)' }}>
+              <Calendar size={13} className="text-[#4F7CFF]" />
+            </div>
             <h2 className="text-sm font-semibold text-white">Trip Dates</h2>
           </div>
           {!editingDates && (
-            <button
-              onClick={openDateEdit}
-              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors px-2.5 py-1.5 rounded-lg hover:bg-white/5 border border-white/8 cursor-pointer"
-            >
-              <Pencil size={12} />
-              Edit
+            <button onClick={openDateEdit}
+              className="flex items-center gap-1.5 text-xs text-[#AEB7C6] hover:text-white transition-colors px-2.5 py-1.5 rounded-lg hover:bg-white/5 cursor-pointer"
+              style={{ border:'1px solid rgba(255,255,255,0.08)' }}>
+              <Pencil size={11} />Edit
             </button>
           )}
         </div>
@@ -192,125 +193,87 @@ export default function TripDetailsPage() {
         {editingDates ? (
           <div className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
-              {/* Start date */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-400">Start Date</label>
-                <input
-                  type="date"
-                  value={editStart}
-                  onChange={(e) => { setEditStart(e.target.value); setDateError(null) }}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-royal/50 focus:ring-2 focus:ring-royal/20 transition-all [color-scheme:dark]"
-                />
+                <label className="block text-xs font-semibold text-[#AEB7C6] uppercase tracking-wider">Start Date</label>
+                <input type="date" value={editStart}
+                  onChange={e => { setEditStart(e.target.value); setDateError(null) }}
+                  className="w-full bg-white/4 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[#4F7CFF]/50 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.12)] transition-all [color-scheme:dark]" />
               </div>
-              {/* End date */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-400">End Date</label>
-                <input
-                  type="date"
-                  value={editEnd}
-                  min={editStart || undefined}
-                  onChange={(e) => { setEditEnd(e.target.value); setDateError(null) }}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-royal/50 focus:ring-2 focus:ring-royal/20 transition-all [color-scheme:dark]"
-                />
+                <label className="block text-xs font-semibold text-[#AEB7C6] uppercase tracking-wider">End Date</label>
+                <input type="date" value={editEnd} min={editStart || undefined}
+                  onChange={e => { setEditEnd(e.target.value); setDateError(null) }}
+                  className="w-full bg-white/4 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[#4F7CFF]/50 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.12)] transition-all [color-scheme:dark]" />
               </div>
             </div>
-
-            {/* Duration preview */}
             {editStart && editEnd && editEnd >= editStart && (
-              <p className="text-xs text-slate-400">
-                Duration:{' '}
-                <span className="text-white font-medium">
-                  {Math.round(
-                    (new Date(editEnd).getTime() - new Date(editStart).getTime()) / 86400000,
-                  ) + 1}{' '}
-                  days
-                </span>
+              <p className="text-xs text-[#AEB7C6]">
+                Duration: <span className="text-white font-semibold">{Math.round((new Date(editEnd).getTime() - new Date(editStart).getTime()) / 86400000) + 1} days</span>
               </p>
             )}
-
-            {/* Error */}
             {dateError && (
-              <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+              <p className="text-xs text-[#FF4D6D] px-3 py-2 rounded-lg"
+                style={{ background:'rgba(255,77,109,0.08)', border:'1px solid rgba(255,77,109,0.2)' }}>
                 {dateError}
               </p>
             )}
-
-            {/* Actions */}
             <div className="flex gap-2 justify-end">
               <Button variant="secondary" size="sm" onClick={cancelDateEdit} disabled={savingDates}>
-                <X size={13} />
-                Cancel
+                <X size={12} />Cancel
               </Button>
               <Button size="sm" onClick={saveDates} loading={savingDates}>
-                <Check size={13} />
-                Save Dates
+                <Check size={12} />Save Dates
               </Button>
             </div>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="p-3 rounded-xl bg-white/4 border border-white/8">
-              <p className="text-xs text-slate-500 mb-1">Start Date</p>
-              <p className="text-sm font-medium text-white">{formatShortDate(trip.startDate)}</p>
-            </div>
-            <div className="p-3 rounded-xl bg-white/4 border border-white/8">
-              <p className="text-xs text-slate-500 mb-1">End Date</p>
-              <p className="text-sm font-medium text-white">{formatShortDate(trip.endDate)}</p>
-            </div>
+            {[{ label:'Start Date', val:formatShortDate(trip.startDate) }, { label:'End Date', val:formatShortDate(trip.endDate) }].map(d => (
+              <div key={d.label} className="p-3 rounded-xl"
+                style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.07)' }}>
+                <p className="text-[10px] text-[#6B7A93] uppercase tracking-wide mb-1">{d.label}</p>
+                <p className="text-sm font-semibold text-white">{d.val}</p>
+              </div>
+            ))}
           </div>
         )}
       </GlassCard>
 
       {/* Budget stats */}
       <div className="grid md:grid-cols-4 gap-4">
-        <GlassCard>
-          <p className="text-xs text-slate-400">Budget</p>
-          <p className="text-xl font-bold text-white mt-1">{formatAmount(trip.budget)}</p>
-        </GlassCard>
-        <GlassCard>
-          <p className="text-xs text-slate-400">Spent</p>
-          <p className="text-xl font-bold text-orange-400 mt-1">{formatAmount(totalSpent)}</p>
-        </GlassCard>
-        <GlassCard>
-          <p className="text-xs text-slate-400">Remaining</p>
-          <p className="text-xl font-bold text-emerald-400 mt-1">
-            {formatAmount(Math.max(trip.budget - totalSpent, 0))}
-          </p>
-        </GlassCard>
-        <GlassCard className="flex items-center justify-center">
-          <ProgressRing value={totalSpent} max={trip.budget || 1} label="Budget Used" />
+        {[
+          { label: 'Budget',    value: formatAmount(trip.budget),                          color: '#4F7CFF', bg: 'rgba(79,124,255,0.1)'  },
+          { label: 'Spent',     value: formatAmount(totalSpent),                            color: '#FFB547', bg: 'rgba(255,181,71,0.1)'  },
+          { label: 'Remaining', value: formatAmount(Math.max(trip.budget - totalSpent, 0)), color: '#19F28C', bg: 'rgba(25,242,140,0.1)'  },
+        ].map(s => (
+          <GlassCard key={s.label} padding="sm">
+            <p className="text-xs text-[#AEB7C6] mb-1.5">{s.label}</p>
+            <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
+            <div className="mt-2 h-0.5 rounded-full" style={{ background: s.bg }} />
+          </GlassCard>
+        ))}
+        <GlassCard className="flex items-center justify-center" padding="sm">
+          <ProgressRing value={totalSpent} max={trip.budget || 1} size={72} strokeWidth={5} label="Used" />
         </GlassCard>
       </div>
 
       {/* Info cards */}
       <div className="grid md:grid-cols-3 gap-4">
-        <GlassCard className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-royal/20">
-            <Map size={24} className="text-royal" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-white">Interactive Map</p>
-            <p className="text-xs text-slate-400">Coming soon</p>
-          </div>
-        </GlassCard>
-        <GlassCard className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-purple-500/20">
-            <Hotel size={24} className="text-purple-400" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-white">Accommodation</p>
-            <p className="text-xs text-slate-400">{accommodationLabel}</p>
-          </div>
-        </GlassCard>
-        <GlassCard className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-cyan-500/20">
-            <Car size={24} className="text-cyan-400" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-white">Transport</p>
-            <p className="text-xs text-slate-400">{transportLabel}</p>
-          </div>
-        </GlassCard>
+        {[
+          { Icon: Map,   color: '#4F7CFF', bg: 'rgba(79,124,255,0.12)',  label: 'Interactive Map',  sub: 'Coming soon'       },
+          { Icon: Hotel, color: '#7B61FF', bg: 'rgba(123,97,255,0.12)',  label: 'Accommodation',    sub: accommodationLabel  },
+          { Icon: Car,   color: '#00C2FF', bg: 'rgba(0,194,255,0.12)',   label: 'Transport',        sub: transportLabel      },
+        ].map(({ Icon, color, bg, label, sub }) => (
+          <GlassCard key={label} className="flex items-center gap-4" padding="sm">
+            <div className="p-3 rounded-xl shrink-0" style={{ background: bg }}>
+              <Icon size={20} style={{ color }} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">{label}</p>
+              <p className="text-xs text-[#AEB7C6]">{sub}</p>
+            </div>
+          </GlassCard>
+        ))}
       </div>
 
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
@@ -333,23 +296,35 @@ export default function TripDetailsPage() {
             {categorySpending.length > 0 ? (
               <>
                 <CategoryChart data={categorySpending} />
-                <div className="space-y-2">
-                  {categorySpending.map((item) => (
-                    <GlassCard key={item.category} padding="sm" className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                        <span className="text-sm text-slate-300">{item.category}</span>
-                      </div>
-                      <span className="text-sm font-medium text-white">{formatAmount(item.amount)}</span>
-                    </GlassCard>
-                  ))}
-                </div>
+                <GlassCard>
+                  <h3 className="text-sm font-semibold text-white mb-4">Budget Breakdown</h3>
+                  <div className="space-y-4">
+                    {categorySpending.map(item => {
+                      const pct = totalSpent > 0 ? Math.round((item.amount / totalSpent) * 100) : 0
+                      return (
+                        <div key={item.category}>
+                          <div className="flex justify-between items-center mb-1.5">
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
+                              <span className="text-sm text-[#AEB7C6]">{item.category}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-sm font-semibold text-white">{formatAmount(item.amount)}</span>
+                              <span className="text-xs text-[#6B7A93] w-8 text-right">{pct}%</span>
+                            </div>
+                          </div>
+                          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                            <div className="h-full rounded-full transition-all duration-700"
+                              style={{ width: `${pct}%`, background: item.color, boxShadow: `0 0 6px ${item.color}66` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </GlassCard>
               </>
             ) : (
-              <EmptyState
-                title="No budget breakdown yet"
-                description="Add expenses to see how your budget is allocated by category."
-              />
+              <EmptyState title="No budget breakdown yet" description="Add expenses to see how your budget is allocated by category." />
             )}
           </div>
         )}

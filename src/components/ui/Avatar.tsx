@@ -24,8 +24,8 @@ export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
         className,
       )}
       style={{
-        background: 'linear-gradient(135deg, #4F7BFF, #00E5FF)',
-        boxShadow: '0 0 10px rgba(79,123,255,0.35)',
+        background: 'linear-gradient(135deg, #4F7CFF, #00C2FF)',
+        boxShadow: '0 0 10px rgba(79,124,255,0.3)',
       }}
     >
       {src ? (

@@ -247,30 +247,21 @@ export default function ExpensesPage() {
 
       {/* Category filter */}
       <div className="flex items-center gap-2 flex-wrap">
-        <Filter size={16} className="text-slate-400" />
-        <button
-          onClick={() => setCategoryFilter('all')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-            categoryFilter === 'all'
-              ? 'bg-royal/20 text-royal-light border border-royal/30'
-              : 'text-slate-400 hover:text-white hover:bg-white/5'
-          }`}
-        >
-          All
-        </button>
-        {EXPENSE_CATEGORIES.map((cat) => (
-          <button
-            key={cat.value}
-            onClick={() => setCategoryFilter(cat.value)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-              categoryFilter === cat.value
-                ? 'bg-royal/20 text-royal-light border border-royal/30'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
+        <Filter size={14} className="text-[#AEB7C6]" />
+        {['all', ...EXPENSE_CATEGORIES.map(c => c.value)].map(cat => {
+          const label = cat === 'all' ? 'All' : EXPENSE_CATEGORIES.find(c => c.value === cat)?.label ?? cat
+          const isActive = categoryFilter === cat
+          return (
+            <button key={cat} onClick={() => setCategoryFilter(cat)}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer"
+              style={isActive ? {
+                background: 'rgba(79,124,255,0.15)', color: '#7B9FFF',
+                border: '1px solid rgba(79,124,255,0.3)',
+              } : { color: '#AEB7C6', border: '1px solid transparent' }}>
+              {label}
+            </button>
+          )
+        })}
       </div>
 
       {filtered.length > 0 ? (

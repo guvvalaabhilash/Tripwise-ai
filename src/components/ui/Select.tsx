@@ -12,26 +12,19 @@ export function Select({ label, value, onChange, options, className }: SelectPro
   return (
     <div className="space-y-1.5">
       {label && (
-        <label className="block text-xs font-semibold text-[#AEB7C6] uppercase tracking-wider">
-          {label}
-        </label>
+        <label className="block text-xs font-semibold text-[#AEB7C6] uppercase tracking-wider">{label}</label>
       )}
-      <select
-        value={value}
-        onChange={e => onChange(e.target.value)}
+      <select value={value} onChange={e => onChange(e.target.value)}
         className={cn(
           'w-full bg-white/4 border border-white/10 rounded-xl',
           'px-4 py-2.5 text-sm text-white',
           'outline-none appearance-none cursor-pointer',
+          'focus:border-[#4F7CFF]/50 focus:bg-[#4F7CFF]/5 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)]',
           'transition-all duration-200',
-          'focus:border-[#4F7CFF]/50 focus:bg-[#4F7CFF]/6 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.12)]',
           className,
-        )}
-      >
+        )}>
         {options.map(opt => (
-          <option key={opt.value} value={opt.value} className="bg-[#0B1020] text-white">
-            {opt.label}
-          </option>
+          <option key={opt.value} value={opt.value} className="bg-[#0B1020] text-white">{opt.label}</option>
         ))}
       </select>
     </div>

@@ -29,10 +29,10 @@ import {
 
 
 const steps = [
-  { id: 1, label: 'Destination', icon: MapPin },
-  { id: 2, label: 'Details', icon: Calendar },
-  { id: 3, label: 'Preferences', icon: Utensils },
-  { id: 4, label: 'Summary', icon: Check },
+  { id: 1, label: 'Destination', icon: MapPin,  desc: 'Where are you going?' },
+  { id: 2, label: 'Details',     icon: Calendar, desc: 'Dates, members & budget' },
+  { id: 3, label: 'Preferences', icon: Utensils, desc: 'Transport & food' },
+  { id: 4, label: 'Summary',     icon: Check,    desc: 'Review & confirm' },
 ]
 
 export default function TripPlannerPage() {
@@ -144,50 +144,91 @@ const handleCreate = async () => {
   navigate("/dashboard");
 };
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-white font-jakarta">
-          Plan Your Trip
-        </h1>
-        <p className="text-slate-400 mt-2">Let AI help you create the perfect itinerary</p>
+    <div className="max-w-5xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white font-[family-name:var(--font-jakarta)]">Plan Your Trip</h1>
+        <p className="text-[#AEB7C6] mt-1 text-sm">Let AI help you create the perfect itinerary</p>
       </div>
 
-      {/* Step indicator */}
-      <div className="flex items-center justify-center gap-2 mb-8">
-        {steps.map((s) => {
-          const Icon = s.icon
-          const isActive = step === s.id
-          const isDone = step > s.id
-          return (
-            <button
-              key={s.id}
-              onClick={() => s.id < step && setStep(s.id)}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                  isActive
-                    ? 'bg-royal/20 border border-royal/40 text-royal-light'
-                    : isDone
-                      ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400'
-                      : 'bg-white/5 border border-white/8 text-slate-500'
-                }`}
-              >
-                {isDone ? <Check size={18} /> : <Icon size={18} />}
+      <div className="flex gap-6">
+        {/* ── Left vertical stepper ── */}
+        <div className="hidden md:flex flex-col gap-0 w-52 shrink-0">
+          {steps.map((s, idx) => {
+            const Icon = s.icon
+            const isActive = step === s.id
+            const isDone   = step > s.id
+            return (
+              <div key={s.id} className="flex flex-col">
+                <button
+                  onClick={() => s.id < step && setStep(s.id)}
+                  className={`flex items-start gap-3 p-3 rounded-xl text-left transition-all duration-200 ${
+                    s.id < step ? 'cursor-pointer' : 'cursor-default'
+                  }`}
+                  style={isActive ? {
+                    background: 'rgba(79,124,255,0.1)',
+                    border: '1px solid rgba(79,124,255,0.22)',
+                  } : { border: '1px solid transparent' }}
+                >
+                  {/* Step circle */}
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-all duration-200"
+                    style={
+                      isDone   ? { background: 'rgba(25,242,140,0.15)', border: '1.5px solid #19F28C' } :
+                      isActive ? { background: 'rgba(79,124,255,0.2)',  border: '1.5px solid #4F7CFF',
+                        boxShadow: '0 0 12px rgba(79,124,255,0.3)' } :
+                                 { background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(255,255,255,0.12)' }
+                    }>
+                    {isDone
+                      ? <Check size={14} className="text-[#19F28C]" />
+                      : isActive
+                        ? <Icon size={14} className="text-[#4F7CFF]" />
+                        : <span className="text-xs font-semibold text-[#6B7A93]">{s.id}</span>
+                    }
+                  </div>
+                  {/* Label */}
+                  <div className="min-w-0">
+                    <p className={`text-sm font-semibold leading-tight ${
+                      isActive ? 'text-white' : isDone ? 'text-[#AEB7C6]' : 'text-[#6B7A93]'
+                    }`}>{s.label}</p>
+                    <p className="text-[10px] text-[#6B7A93] mt-0.5">{s.desc}</p>
+                  </div>
+                </button>
+                {/* Connector line */}
+                {idx < steps.length - 1 && (
+                  <div className="ml-7 w-px h-4 self-start"
+                    style={{ background: isDone ? 'rgba(25,242,140,0.4)' : 'rgba(255,255,255,0.07)' }} />
+                )}
               </div>
-              <span className={`text-xs hidden sm:block ${isActive ? 'text-white' : 'text-slate-500'}`}>
-                {s.label}
-              </span>
-              {s.id < steps.length && (
-                <div className={`w-8 h-px mx-1 ${isDone ? 'bg-emerald-500/40' : 'bg-white/10'}`} />
-              )}
-            </button>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
 
-      <GlassCard glow="royal">
-        <AnimatePresence mode="wait">
+        {/* ── Mobile horizontal stepper ── */}
+        <div className="flex md:hidden items-center justify-center gap-1.5 mb-4 w-full">
+          {steps.map((s) => {
+            const isActive = step === s.id
+            const isDone   = step > s.id
+            return (
+              <button key={s.id} onClick={() => s.id < step && setStep(s.id)}
+                className={`flex items-center gap-1.5 ${s.id < step ? 'cursor-pointer' : 'cursor-default'}`}>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                  isDone ? 'bg-[#19F28C]/15 text-[#19F28C]' :
+                  isActive ? 'text-[#4F7CFF]' : 'text-[#6B7A93]'
+                }`} style={isActive ? { background: 'rgba(79,124,255,0.18)', boxShadow: '0 0 10px rgba(79,124,255,0.3)' } :
+                  isDone ? {} : { background: 'rgba(255,255,255,0.05)' }}>
+                  {isDone ? <Check size={12} /> : s.id}
+                </div>
+                {s.id < steps.length && (
+                  <div className={`w-5 h-px ${isDone ? 'bg-[#19F28C]/40' : 'bg-white/10'}`} />
+                )}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* ── Form panel ── */}
+        <div className="flex-1 min-w-0">
+          <GlassCard glow="royal" padding="lg">
+            <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div
               key="step1"
@@ -214,16 +255,23 @@ const handleCreate = async () => {
                 value={form.destination}
                 onChange={(e) => update('destination', e.target.value)}
               />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2.5">
                 {['Goa, India', 'Jaipur, India', 'Kerala Backwaters', 'Varanasi, India'].map((dest) => (
                   <button
                     key={dest}
                     onClick={() => update('destination', dest)}
-                    className={`p-3 rounded-xl text-sm text-left transition-all cursor-pointer ${
+                    className={`p-3 rounded-xl text-sm text-left transition-all duration-200 cursor-pointer font-medium ${
                       form.destination === dest
-                        ? 'bg-royal/20 border border-royal/40 text-white'
-                        : 'bg-white/5 border border-white/8 text-slate-400 hover:border-white/15'
+                        ? 'text-[#4F7CFF]'
+                        : 'text-[#AEB7C6] hover:text-white'
                     }`}
+                    style={form.destination === dest ? {
+                      background: 'rgba(79,124,255,0.12)',
+                      border: '1px solid rgba(79,124,255,0.3)',
+                    } : {
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}
                   >
                     {dest}
                   </button>
@@ -336,19 +384,20 @@ const handleCreate = async () => {
                   <Plane size={16} />
                   Transport
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
                   {TRANSPORT_OPTIONS.map((opt) => (
                     <button
                       key={opt.value}
                       onClick={() => update('transport', opt.value)}
-                      className={`p-3 rounded-xl text-sm transition-all cursor-pointer ${
-                        form.transport === opt.value
-                          ? 'bg-royal/20 border border-royal/40 text-white'
-                          : 'bg-white/5 border border-white/8 text-slate-400 hover:border-white/15'
+                      className={`p-3 rounded-xl text-sm transition-all duration-200 cursor-pointer text-center ${
+                        form.transport === opt.value ? 'text-[#4F7CFF]' : 'text-[#AEB7C6] hover:text-white'
                       }`}
+                      style={form.transport === opt.value ? {
+                        background: 'rgba(79,124,255,0.12)', border: '1px solid rgba(79,124,255,0.3)',
+                      } : { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
                     >
-                      <span className="text-lg">{opt.icon}</span>
-                      <p className="mt-1">{opt.label}</p>
+                      <span className="text-xl block mb-1">{opt.icon}</span>
+                      <p className="text-xs font-medium">{opt.label}</p>
                     </button>
                   ))}
                 </div>
@@ -358,19 +407,20 @@ const handleCreate = async () => {
                   <Home size={16} />
                   Accommodation
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
                   {ACCOMMODATION_OPTIONS.map((opt) => (
                     <button
                       key={opt.value}
                       onClick={() => update('accommodation', opt.value)}
-                      className={`p-3 rounded-xl text-sm transition-all cursor-pointer ${
-                        form.accommodation === opt.value
-                          ? 'bg-royal/20 border border-royal/40 text-white'
-                          : 'bg-white/5 border border-white/8 text-slate-400 hover:border-white/15'
+                      className={`p-3 rounded-xl text-sm transition-all duration-200 cursor-pointer text-center ${
+                        form.accommodation === opt.value ? 'text-[#4F7CFF]' : 'text-[#AEB7C6] hover:text-white'
                       }`}
+                      style={form.accommodation === opt.value ? {
+                        background: 'rgba(79,124,255,0.12)', border: '1px solid rgba(79,124,255,0.3)',
+                      } : { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
                     >
-                      <span className="text-lg">{opt.icon}</span>
-                      <p className="mt-1">{opt.label}</p>
+                      <span className="text-xl block mb-1">{opt.icon}</span>
+                      <p className="text-xs font-medium">{opt.label}</p>
                     </button>
                   ))}
                 </div>
@@ -396,29 +446,29 @@ const handleCreate = async () => {
                 <Check size={32} className="text-emerald-400 mx-auto mb-3" />
                 <h2 className="text-lg font-semibold text-white">Trip Summary</h2>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {[
-                  { label: 'Trip Name', value: form.tripName || 'Not set' },
-                  { label: 'Destination', value: form.destination || 'Not set' },
-                  { label: 'Dates', value: form.startDate && form.endDate ? `${form.startDate} → ${form.endDate}` : 'Not set' },
-                  { label: 'Travelers', value: form.travelers },
-                  { label: 'Budget', value: formatAmount(form.budget) },
-                  { label: 'Transport', value: TRANSPORT_OPTIONS.find((t) => t.value === form.transport)?.label },
-                  { label: 'Accommodation', value: ACCOMMODATION_OPTIONS.find((a) => a.value === form.accommodation)?.label },
-                  { label: 'Food', value: FOOD_PREFERENCES.find((f) => f.value === form.foodPreference)?.label },
+                  { label: 'Trip Name',     value: form.tripName || 'Not set' },
+                  { label: 'Destination',   value: form.destination || 'Not set' },
+                  { label: 'Dates',         value: form.startDate && form.endDate ? `${form.startDate} → ${form.endDate}` : 'Not set' },
+                  { label: 'Travelers',     value: form.travelers },
+                  { label: 'Budget',        value: formatAmount(form.budget) },
+                  { label: 'Transport',     value: TRANSPORT_OPTIONS.find(t => t.value === form.transport)?.label },
+                  { label: 'Accommodation', value: ACCOMMODATION_OPTIONS.find(a => a.value === form.accommodation)?.label },
+                  { label: 'Food',          value: FOOD_PREFERENCES.find(f => f.value === form.foodPreference)?.label },
                 ].map((item) => (
-                  <div key={item.label} className="flex justify-between py-2 border-b border-white/6">
-                    <span className="text-sm text-slate-400">{item.label}</span>
-                    <span className="text-sm text-white font-medium">{item.value}</span>
+                  <div key={item.label} className="flex justify-between items-center py-2.5 px-3 rounded-xl"
+                    style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.06)' }}>
+                    <span className="text-xs text-[#AEB7C6]">{item.label}</span>
+                    <span className="text-sm font-medium text-white">{item.value}</span>
                   </div>
                 ))}
               </div>
-              <div className="p-4 rounded-xl bg-royal/10 border border-royal/20">
+              <div className="p-4 rounded-xl mt-2"
+                style={{ background:'rgba(79,124,255,0.08)', border:'1px solid rgba(79,124,255,0.18)' }}>
                 <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-royal-light" />
-                  <p className="text-sm text-royal-light">
-                    AI will generate a personalized itinerary based on your preferences
-                  </p>
+                  <Sparkles size={15} className="text-[#4F7CFF]" />
+                  <p className="text-sm text-[#AEB7C6]">AI will craft a personalized itinerary based on your preferences.</p>
                 </div>
               </div>
             </motion.div>
@@ -445,6 +495,8 @@ const handleCreate = async () => {
           )}
         </div>
       </GlassCard>
+        </div>
+      </div>
     </div>
   )
 }
