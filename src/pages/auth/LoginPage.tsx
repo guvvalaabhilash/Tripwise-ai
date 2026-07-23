@@ -27,7 +27,7 @@ export default function LoginPage() {
     setGoogleLoading(true)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/dashboard` },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     })
     if (error) { console.error('[Google OAuth] Error:', error.message); alert(error.message); setGoogleLoading(false) }
   }
@@ -36,7 +36,7 @@ export default function LoginPage() {
     setFacebookLoading(true)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
-      options: { redirectTo: `${window.location.origin}/dashboard`, scopes: 'email,public_profile' },
+      options: { redirectTo: `${window.location.origin}/auth/callback`, scopes: 'email,public_profile' },
     })
     if (error) { console.error('[Facebook OAuth] Error:', error.message, error); alert(error.message); setFacebookLoading(false) }
   }

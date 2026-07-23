@@ -8,6 +8,7 @@ import LoginPage from '@/pages/auth/LoginPage'
 import RegisterPage from '@/pages/auth/RegisterPage'
 import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage'
 import OTPPage from '@/pages/auth/OTPPage'
+import AuthCallbackPage from '@/pages/auth/AuthCallbackPage'
 import DashboardPage from '@/pages/DashboardPage'
 import TripPlannerPage from '@/pages/TripPlannerPage'
 import TripDetailsPage from '@/pages/TripDetailsPage'
@@ -39,6 +40,9 @@ function AnimatedRoutes() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/verify-otp" element={<OTPPage />} />
           </Route>
+
+          {/* OAuth callback — must be outside AuthLayout and ProtectedRoute */}
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
           <Route
   element={

@@ -12,10 +12,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    // Disable automatic token refresh retries when the network is unavailable.
-    // This prevents the flood of ERR_NAME_NOT_RESOLVED / "Failed to fetch" errors
-    // when the Supabase project is paused or unreachable.
-    autoRefreshToken: false,
+    autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
   },

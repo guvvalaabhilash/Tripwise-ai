@@ -11,15 +11,14 @@ export default function ProtectedRoute({ children }: Props) {
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-
+    // onAuthStateChange fires immediately with the current session AND handles
+    // the OAuth callback token that Supabase parses from the URL hash.
+    // This is more reliable than getSession() alone for OAuth flows.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
