@@ -69,6 +69,7 @@ export default function LoginPage() {
             <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#AEB7C6] z-10 pointer-events-none" />
             <input
               type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"

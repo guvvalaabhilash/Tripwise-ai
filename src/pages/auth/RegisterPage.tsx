@@ -58,6 +58,7 @@ export default function RegisterPage() {
           <div className="relative">
             <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#AEB7C6] z-10 pointer-events-none" />
             <input type={showPassword ? 'text' : 'password'} placeholder="Min. 8 characters"
+              autoComplete="new-password"
               value={password} onChange={e => setPassword(e.target.value)}
               className="w-full bg-white/4 border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-[#AEB7C6]/50 outline-none focus:border-[#4F7CFF]/50 focus:bg-[#4F7CFF]/6 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.12)] transition-all [color-scheme:dark]" />
             <button type="button" onClick={() => setShowPassword(!showPassword)}

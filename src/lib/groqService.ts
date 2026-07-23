@@ -1,16 +1,17 @@
 /**
  * groqService.ts
  *
- * Uses the Groq SDK with llama-3.3-70b-versatile — Groq's free tier is
- * extremely generous (14,400 req/day, 500,000 tokens/min) compared to Gemini's
- * free tier, making it a solid drop-in replacement.
+ * Calls the Groq API directly via fetch (no SDK) to avoid browser-environment
+ * issues with the groq-sdk package making GET instead of POST requests.
+ *
+ * Model: llama-3.3-70b-versatile
+ * Free tier: 14,400 req/day, 500,000 tokens/min
  *
  * Get your free API key at: https://console.groq.com/keys
  * Add it to .env as:  VITE_GROQ_API_KEY=gsk_...
  */
-import Groq from 'groq-sdk'
 
-const API_KEY = import.meta.env.VITE_GROQ_API_KEY as string
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 // ── System prompt — defines the AI persona ──────────────────────────────────
 const SYSTEM_PROMPT = `You are TripWise AI, an expert travel planning assistant built into the TripWise app.
@@ -32,26 +33,10 @@ Guidelines:
 - Suggest using TripWise features like the Expenses tracker, Split page, or Trip Planner when relevant.
 - Keep responses focused on travel; politely redirect off-topic questions back to trip planning.`
 
-// ── Message type that mirrors Groq's chat message shape ─────────────────────
+// ── Message type ─────────────────────────────────────────────────────────────
 export interface GroqMessage {
   role: 'user' | 'assistant' | 'system'
   content: string
-}
-
-// Lazy-init client
-let client: Groq | null = null
-
-function getClient(): Groq {
-  if (!client) {
-    if (!API_KEY || API_KEY === 'your_groq_api_key_here') {
-      throw new Error(
-        'VITE_GROQ_API_KEY is not set. Get a free key at https://console.groq.com/keys and add it to your .env file.',
-      )
-    }
-    // dangerouslyAllowBrowser is required for browser-side SDK usage
-    client = new Groq({ apiKey: API_KEY, dangerouslyAllowBrowser: true })
-  }
-  return client
 }
 
 /**
@@ -59,18 +44,39 @@ function getClient(): Groq {
  * Pass the full conversation history so the model has context.
  */
 export async function sendGroqMessage(history: GroqMessage[], userMessage: string): Promise<string> {
+  const API_KEY = import.meta.env.VITE_GROQ_API_KEY as string
+
+  if (!API_KEY || API_KEY === 'your_groq_api_key_here') {
+    throw new Error(
+      'VITE_GROQ_API_KEY is not set. Get a free key at https://console.groq.com/keys and add it to your .env file.',
+    )
+  }
+
   const messages: GroqMessage[] = [
     { role: 'system', content: SYSTEM_PROMPT },
     ...history,
     { role: 'user', content: userMessage },
   ]
 
-  const completion = await getClient().chat.completions.create({
-    model: 'llama-3.3-70b-versatile',
-    messages,
-    max_tokens: 1024,
-    temperature: 0.7,
+  const res = await fetch(GROQ_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages,
+      max_tokens: 1024,
+      temperature: 0.7,
+    }),
   })
 
-  return completion.choices[0]?.message?.content ?? ''
+  if (!res.ok) {
+    const errBody = await res.text()
+    throw new Error(`Groq API error ${res.status}: ${errBody}`)
+  }
+
+  const data = await res.json()
+  return (data.choices?.[0]?.message?.content as string) ?? ''
 }
